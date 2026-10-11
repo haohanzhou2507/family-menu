@@ -1,0 +1,7 @@
+services:
+  family-menu:
+    build: .
+    container_name: family-menu
+    ports:
+      - "3000:80"
+    restart: unless-stopped

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4efe3" />
+    <title>家常菜单</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="paper-grain" aria-hidden="true"></div>
+    <header class="masthead">
+      <button class="brand" data-view="menu" aria-label="回到菜单">
+        <span class="brand-mark">家</span>
+        <span>
+          <strong>家常菜单</strong>
+          <small>今天想吃什么？</small>
+        </span>
+      </button>
+      <button class="basket-button" data-view="picked">
+        本次已选 <span id="picked-count">0</span>
+      </button>
+    </header>
+
+    <main>
+      <section id="menu-view" class="view active" aria-labelledby="menu-title">
+        <div class="hero">
+          <p class="eyebrow">OUR HOME KITCHEN</p>
+          <h1 id="menu-title">翻翻菜单，<br />选几道今天想吃的。</h1>
+          <p>点一下加入本次菜单。选好后，食材会自动汇总。</p>
+        </div>
+
+        <div class="menu-toolbar">
+          <label class="search-box">
+            <span>⌕</span>
+            <input id="search-input" type="search" placeholder="找一道菜" />
+          </label>
+          <button class="primary-button" data-view="editor">＋ 录入新菜</button>
+        </div>
+
+        <div id="category-filter" class="category-filter" aria-label="菜品分类"></div>
+        <div id="dish-grid" class="dish-grid"></div>
+        <div id="empty-menu" class="empty-state hidden">
+          <span>🍚</span>
+          <h2>菜单还是空的</h2>
+          <p>先录入一道家里的拿手菜吧。</p>
+          <button class="primary-button" data-view="editor">录入第一道菜</button>
+        </div>
+      </section>
+
+      <section id="picked-view" class="view" aria-labelledby="picked-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">TODAY'S TABLE</p>
+            <h1 id="picked-title">本次菜单</h1>
+          </div>
+          <button id="clear-picked" class="text-button">全部清空</button>
+        </div>
+
+        <div id="picked-empty" class="empty-state hidden">
+          <span>🥢</span>
+          <h2>还没选菜</h2>
+          <p>回到菜单，点选今天想吃的菜。</p>
+          <button class="primary-button" data-view="menu">去选菜</button>
+        </div>
+
+        <div id="picked-content">
+          <div id="picked-list" class="picked-list"></div>
+          <article class="ingredient-sheet">
+            <div class="sheet-title">
+              <span>采购备料单</span>
+              <small>按已选菜品自动汇总</small>
+            </div>
+            <ul id="ingredient-summary" class="ingredient-summary"></ul>
+          </article>
+          <div class="cook-callout">
+            <div>
+              <small>准备开火了吗？</small>
+              <strong>点击上面的菜名查看做法</strong>
+            </div>
+            <span>→</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="editor-view" class="view" aria-labelledby="editor-title">
+        <div class="section-heading editor-heading">
+          <div>
+            <p class="eyebrow">RECIPE NOTE</p>
+            <h1 id="editor-title">录入一道菜</h1>
+          </div>
+          <button class="text-button" data-view="menu">取消</button>
+        </div>
+
+        <form id="recipe-form" class="recipe-form">
+          <input id="recipe-id" type="hidden" />
+          <div class="form-grid">
+            <label>
+              <span>菜名</span>
+              <input id="recipe-name" required maxlength="30" placeholder="例如：番茄炒蛋" />
+            </label>
+            <label>
+              <span>分类</span>
+              <input id="recipe-category" required maxlength="12" placeholder="例如：家常菜" />
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>
+              <span>需要的食材</span>
+              <button id="add-ingredient" type="button" class="text-button">＋ 添加一行</button>
+            </legend>
+            <div class="ingredient-labels" aria-hidden="true">
+              <span>食材</span><span>数量</span><span>单位</span><span></span>
+            </div>
+            <div id="ingredient-rows" class="ingredient-rows"></div>
+          </fieldset>
+
+          <label class="steps-field">
+            <span>制作步骤</span>
+            <small>每行写一个步骤，做饭时会按顺序展示</small>
+            <textarea id="recipe-steps" required rows="7" placeholder="鸡蛋打散，加少许盐。&#10;番茄切块，热锅下油翻炒。&#10;倒入鸡蛋炒匀后出锅。"></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button id="delete-recipe" type="button" class="danger-button hidden">删除这道菜</button>
+            <button type="submit" class="primary-button save-button">保存菜谱</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="cook-view" class="view" aria-labelledby="cook-title">
+        <button class="back-button" data-view="picked">← 返回本次菜单</button>
+        <article id="cook-content" class="cook-content"></article>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主要导航">
+      <button class="active" data-view="menu"><span>⌂</span>菜单</button>
+      <button data-view="picked"><span>✓</span>已选 <b id="nav-count">0</b></button>
+      <button data-view="editor"><span>＋</span>录入</button>
+    </nav>
+
+    <template id="ingredient-row-template">
+      <div class="ingredient-row">
+        <input class="ingredient-name" required placeholder="鸡蛋" aria-label="食材名称" />
+        <input class="ingredient-quantity" required placeholder="3" aria-label="数量" />
+        <input class="ingredient-unit" placeholder="个" aria-label="单位" />
+        <button type="button" class="remove-row" aria-label="删除这一行">×</button>
+      </div>
+    </template>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
