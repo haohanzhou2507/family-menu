@@ -1,5 +1,10 @@
-FROM nginx:alpine
+FROM node:22-alpine
 
-COPY index.html styles.css app.js /usr/share/nginx/html/
+WORKDIR /app
+COPY index.html styles.css app.js server.js tutorial.js ./
 
-EXPOSE 80
+ENV PORT=3000
+ENV DATA_FILE=/app/data/state.json
+EXPOSE 3000
+
+CMD ["node", "server.js"]

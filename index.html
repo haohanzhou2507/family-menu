@@ -35,6 +35,7 @@
             <span>⌕</span>
             <input id="search-input" type="search" placeholder="找一道菜" />
           </label>
+          <button id="menu-clear-picked" class="text-button" data-clear-picked type="button" disabled>一键清空</button>
           <button class="primary-button" data-view="editor">＋ 录入新菜</button>
         </div>
 
@@ -54,7 +55,7 @@
             <p class="eyebrow">TODAY'S TABLE</p>
             <h1 id="picked-title">本次菜单</h1>
           </div>
-          <button id="clear-picked" class="text-button">全部清空</button>
+          <button id="clear-picked" class="text-button" data-clear-picked type="button">一键清空</button>
         </div>
 
         <div id="picked-empty" class="empty-state hidden">
@@ -105,9 +106,22 @@
             </label>
           </div>
 
+          <div class="image-field">
+            <label class="image-upload">
+              <span>菜品图片</span>
+              <small>支持 JPG、PNG、WebP、GIF、HEIC，最大 8MB</small>
+              <input id="recipe-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif" />
+            </label>
+            <input id="recipe-image-url" type="hidden" />
+            <div id="image-preview" class="image-preview hidden">
+              <img id="image-preview-picture" alt="菜品图片预览" />
+              <button id="remove-image" type="button">移除图片</button>
+            </div>
+          </div>
+
           <fieldset>
             <legend>
-              <span>需要的食材</span>
+              <span>需要的食材（可选）</span>
               <button id="add-ingredient" type="button" class="text-button">＋ 添加一行</button>
             </legend>
             <div class="ingredient-labels" aria-hidden="true">
@@ -116,10 +130,23 @@
             <div id="ingredient-rows" class="ingredient-rows"></div>
           </fieldset>
 
+          <div class="field-divider"><span>或者</span></div>
           <label class="steps-field">
-            <span>制作步骤</span>
-            <small>每行写一个步骤，做饭时会按顺序展示</small>
-            <textarea id="recipe-steps" required rows="7" placeholder="鸡蛋打散，加少许盐。&#10;番茄切块，热锅下油翻炒。&#10;倒入鸡蛋炒匀后出锅。"></textarea>
+            <span>直接粘贴食材文字（可选）</span>
+            <small>格式不限，例如从聊天、备忘录或菜谱中整段复制</small>
+            <textarea id="recipe-ingredients-text" rows="5" placeholder="番茄 2 个&#10;鸡蛋 3 个&#10;盐和食用油适量"></textarea>
+          </label>
+
+          <label class="steps-field">
+            <span>教程文字</span>
+            <small>可选，每行写一个步骤</small>
+            <textarea id="recipe-steps" rows="7" placeholder="鸡蛋打散，加少许盐。&#10;番茄切块，热锅下油翻炒。&#10;倒入鸡蛋炒匀后出锅。"></textarea>
+          </label>
+
+          <label class="steps-field link-field">
+            <span>教程链接（可选）</span>
+            <small>可粘贴抖音或哔哩哔哩的链接，也支持包含链接的整段分享文案</small>
+            <input id="recipe-tutorial-url" inputmode="url" placeholder="https://v.douyin.com/... 或 https://b23.tv/..." />
           </label>
 
           <div class="form-actions">
@@ -143,8 +170,8 @@
 
     <template id="ingredient-row-template">
       <div class="ingredient-row">
-        <input class="ingredient-name" required placeholder="鸡蛋" aria-label="食材名称" />
-        <input class="ingredient-quantity" required placeholder="3" aria-label="数量" />
+        <input class="ingredient-name" placeholder="鸡蛋" aria-label="食材名称" />
+        <input class="ingredient-quantity" placeholder="3" aria-label="数量" />
         <input class="ingredient-unit" placeholder="个" aria-label="单位" />
         <button type="button" class="remove-row" aria-label="删除这一行">×</button>
       </div>
